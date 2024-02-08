@@ -24,9 +24,11 @@ const authMiddleware = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, 'MY_SECRET_KEY');
 
+        if(decoded.role=="user")
+        {
         req.userId = decoded.id;
-
         next();
+        }
     } catch (error) {
         console.error(error);
         res.status(401).json({ message: 'Invalid token' });
