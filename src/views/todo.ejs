@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+</head>
+<body>
+    <nav>
+        <form action="/auth/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+            
+    </nav>
+    <form action="/tasks/todo" method="post">
+        <label for="tasks">Enter task:</label>
+        <input type="text" name="tasks" value="g" >
+        <button type="submit"> Add Tasks</button>
+    </form>
+
+    <div>
+        <ul>
+            <% task.forEach(task => { %>
+                <li>
+                    
+                    <%= task.task %> 
+                    
+                    <a href="/tasks/edit-task/<%= task._id %>">Edit</a>
+                    
+                    <button type="submit" method ="delete"></button>
+                    <form action="/tasks/delete-task" method="post" style="display:inline;">
+                        <input type="hidden" name="taskId" value="<%= task._id %>">
+                        <button type="submit">Delete</button>
+                    </form>
+                    
+                    <!-- <form action="/edit-task" method="post" style="display:inline;">
+                        <input type="hidden" name="taskId" value="<%= task._id %>">
+                        <button type="submit">Edit</button>
+                    </form> -->
+                </li>
+              <% }); %>          
+        </ul>
+    </div>
+</body>
+</html>

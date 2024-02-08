@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+</head>
+<body>
+    <nav>
+        <form action="/auth/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+            
+    </nav>
+  
+
+    <div>
+        <ul>
+            <% user.forEach(user => { %>
+                <li>
+                    
+                    <%= user.username %> <br><%= user.email %> <br> <%= user.role %> 
+                    
+                    <a href="/admin/edit-user/<%= user._id %>">Edit</a>
+                    
+                    <button type="submit" method ="delete"></button>
+                    <form action="/admin/delete-user" method="post" style="display:inline;">
+                        <input type="hidden" name="user_id" value="<%= user._id %>">
+                        <button type="submit">Delete</button>
+                    </form>
+                    <a href="/admin/allTasks/<%= user._id %>">User's Tasks</a>
+                    
+                    
+                  
+                </li>
+              <% }); %>          
+        </ul>
+    </div>
+</body>
+</html>

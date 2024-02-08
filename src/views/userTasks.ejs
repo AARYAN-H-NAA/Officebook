@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>Tasks</h1>
+<div>
+    <ul>
+        <% task.forEach(task => { %>
+            <li>
+                
+                <%= task.task %> 
+                
+                <a href="/admin/edit-task/<%= task._id %>">Edit</a>
+                
+                <button type="submit" method ="delete"></button>
+                <form action="/admin/delete-task" method="post" style="display:inline;">
+                    <input type="hidden" name="taskId" value="<%= task._id %>">
+                    <input type="hidden" name="userId" value="<%= userId %>">
+                    <button type="submit" id="refreshButton">Delete</button>
+                </form>
+                
+                <!-- <form action="/edit-task" method="post" style="display:inline;">
+                    <input type="hidden" name="taskId" value="<%= task._id %>">
+                    <button type="submit">Edit</button>
+                </form> -->
+            </li>
+          <% }); %>          
+    </ul>
+</div>
+
+</body>
+</html>
