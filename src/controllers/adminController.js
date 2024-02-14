@@ -4,7 +4,7 @@ const Task = require('../models/todo');
 const adminController = {
     async getUsers(req, res) {
         try {
-            const tasks = await findUsers(); 
+            const tasks = await databaseOperation('findItems', User.find()); 
             res.render('admin', { user: Array.isArray(tasks) ? tasks : [tasks] }); 
         } catch (error) {
             handleError(res, error);
@@ -13,7 +13,7 @@ const adminController = {
 
     async getEditUser(req, res) {
         try {
-            const user = await findUserById(req.params.id); 
+            const user = await databaseOperation('findItemById', User.findById(req.params.id)); 
             res.render('adminUpdate', { user }); 
         } catch (error) {
             handleError(res, error);
@@ -22,7 +22,7 @@ const adminController = {
 
     async postEditUser(req, res) {
         try {
-            await updateUser(req.params.id, req.body.updatedUsername, req.body.updatedEmail, req.body.updatedRole); 
+            await databaseOperation('updateUser', req.params.id, req.body.updatedUsername, req.body.updatedEmail, req.body.updatedRole); 
         } catch (error) {
             handleError(res, error);
         }
@@ -31,7 +31,7 @@ const adminController = {
 
     async postDeleteUser(req, res) {
         try {
-            await deleteUser(req.body.user_id); 
+            await databaseOperation('deleteUser', req.body.user_id); 
         } catch (error) {
             handleError(res, error);
         }
@@ -40,7 +40,7 @@ const adminController = {
 
     async getAlltasks(req, res) {
         try {
-            const task = await findTasksByUserId(req.params.id.replace(':', '')); 
+            const task = await databaseOperation('findItems', Task.find({ userId: req.params.id.replace(':', '') })); 
             res.render('userTasks', { task, userId: req.params.id }); 
         } catch (error) {
             handleError(res, error);
@@ -49,7 +49,7 @@ const adminController = {
 
     async postDeleteTask(req, res) {
         try {
-            await deleteTask(req.body.taskId); 
+            await databaseOperation('deleteTask', req.body.taskId); 
             res.redirect(`/admin/allTasks/:${req.body.userId}`); 
         } catch (error) {
             handleError(res, error);
@@ -58,7 +58,7 @@ const adminController = {
 
     async getEditTask(req, res) {
         try {
-            const task = await findTaskById(req.params.id); 
+            const task = await databaseOperation('findItemById', Task.findById(req.params.id)); 
             res.render('updateUserTasks', { task }); 
         } catch (error) {
             handleError(res, error);
@@ -67,7 +67,7 @@ const adminController = {
 
     async postEditTask(req, res) {
         try {
-            await updateTask(req.params.id, req.body.updatedTask); 
+            await databaseOperation('updateTask', req.params.id, req.body.updatedTask); 
             res.redirect(req.get('referer')); 
         } catch (error) {
             handleError(res, error);
@@ -79,36 +79,31 @@ module.exports = adminController;
 
 // Common functions
 
-async function findUsers() {
-    return await User.find().exec();
-}
-
-async function findUserById(id) {
-    return await User.findById(id).exec();
-}
-
-async function updateUser(id, updatedUsername, updatedEmail, updatedRole) {
-    await User.findOneAndUpdate({ _id: id }, { username: updatedUsername, email: updatedEmail, role: updatedRole });
-}
-
-async function deleteUser(id) {
-    await User.findOneAndDelete({ _id: id });
-}
-
-async function findTasksByUserId(userId) {
-    return await Task.find({ userId }).exec();
-}
-
-async function deleteTask(id) {
-    await Task.findByIdAndDelete(id);
-}
-
-async function findTaskById(id) {
-    return await Task.findById(id).exec();
-}
-
-async function updateTask(id, updatedTask) {
-    await Task.findOneAndUpdate({ _id : id }, { task: updatedTask });
+async function databaseOperation(operation, ...args) {
+    try {
+        switch (operation) {
+            case 'findItems':
+            case 'findItemById':
+                return await args[0].exec();
+            case 'updateUser':
+                await User.findOneAndUpdate({ _id: args[0] }, { username: args[1], email: args[2], role: args[3] });
+                break;
+            case 'deleteUser':
+                await User.findOneAndDelete({ _id: args[0] });
+                break;
+            case 'deleteTask':
+                await Task.findByIdAndDelete(args[0]);
+                break;
+            case 'updateTask':
+                await Task.findOneAndUpdate({ _id: args[0] }, { task: args[1] });
+                break;
+            default:
+                throw new Error('Invalid operation');
+        }
+    } catch (error) {
+        console.error(error);
+        throw new Error('Internal Server Error');
+    }
 }
 
 function handleError(res, error) {
