@@ -13,7 +13,7 @@ const authMiddleware = (req, res, next) => {
         return res.status(401).json({ message: 'Access denied, no token provided' });
     }
     try {
-        const decoded = jwt.verify(token, 'MY_SECRET_KEY');
+        const decoded = jwt.verify(token, process.env.jwtKey);
         req.userId = decoded.id;
         req.userRole = decoded.role;
         next();

@@ -2,7 +2,8 @@ const User = require("../models/user");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const jwtKey = "MY_SECRET_KEY";
+const jwtKey = process.env.jwtKey;
+const expiresIn = process.env.expiresIn
 
 const authController = {
     // Controller method for user registration
@@ -24,7 +25,7 @@ const authController = {
                 password: hashedPassword,
             });
             // Generate JWT token for the new user
-            const token = await jwt.sign({ email: result.email, id: result._id , role: result.role}, jwtKey , {expiresIn: '1h'});
+            const token = await jwt.sign({ email: result.email, id: result._id , role: result.role}, jwtKey , {expiresIn: expiresIn});
             // Set token as a cookie and redirect to login page
             res.cookie('token', token, { httpOnly: true });
             res.redirect('/auth/login');
@@ -49,7 +50,7 @@ const authController = {
                 return res.status(400).json({ message: "Incorrect Password" });
             }
             // Generate JWT token for the user
-            const token = jwt.sign({ email: existingUser.email, id: existingUser._id , role:existingUser.role}, jwtKey , {expiresIn: '1h'});
+            const token = jwt.sign({ email: existingUser.email, id: existingUser._id , role:existingUser.role}, jwtKey , {expiresIn: expiresIn});
             // Redirect based on user role
             if(existingUser.role == "user") {
                 res.cookie('token', token, { httpOnly: true });
