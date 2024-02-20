@@ -14,8 +14,9 @@ router
     // delete a task
     .post('/delete-task', authMiddleware, todoController.deleteTask)
     // get edit task page
-    .get("/edit-task/:id", authMiddleware, todoController.getEditTasks)
+    .get("/edit-task/:id", authMiddleware, todoController.getEditTask)
     // post edit task
     .post('/edit-task/:id', authMiddleware, todoController.postEditTask);
+    
     
 module.exports = router;
