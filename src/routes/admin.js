@@ -2,18 +2,18 @@
 const express = require('express');
 const router = express.Router(); 
 const adminController = require('../controllers/adminController'); 
-const { adminauthMiddleware } = require('../middlewares/authMiddleware'); 
-
+const  authMiddleware  = require('../middleware/authMiddleware'); 
+const acessMiddleware = require('../middleware/acessMiddleware')
 // Define routes
 router
-    .get('/tasks', adminauthMiddleware, adminController.getUsers)
-    .get('/edit-user/:id', adminauthMiddleware, adminController.getEditUserByID)
-    .post('/edit-user/:id', adminauthMiddleware, adminController.putEditUser)
-    .get('/allTasks/:id', adminauthMiddleware, adminController.getAllTasks)
-    .post('/delete-user', adminauthMiddleware, adminController.deleteUser)
-    .post('/delete-task', adminauthMiddleware, adminController.deleteTask)
-    .get('/edit-task/:id', adminauthMiddleware, adminController.getEditTaskById)
-    .post('/edit-task/:id', adminauthMiddleware, adminController.putEditTask);
+    .get('/tasks', authMiddleware,acessMiddleware, adminController.getUsers)
+    .get('/edit-user/:id', authMiddleware,acessMiddleware, adminController.getEditTaskById)
+    .put('/edit-user/:id', authMiddleware,acessMiddleware, adminController.putEditUser)
+    .get('/allTasks/:id', authMiddleware,acessMiddleware, adminController.getAllTasks)
+    .delete('/delete-user', authMiddleware,acessMiddleware, adminController.deleteUser)
+    .post('/delete-task', authMiddleware,acessMiddleware, adminController.deleteTask)
+    .get('/edit-task/:id', authMiddleware,acessMiddleware, adminController.getEditTaskById)
+    .put('/edit-task/:id', authMiddleware,acessMiddleware, adminController.putEditTask);
 
 module.exports = router; // Export the router for use in other files
 
