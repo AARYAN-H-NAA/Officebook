@@ -12,11 +12,11 @@ router
     // Add new task
     .post('/todo', authMiddleware, todoController.postTodo)
     // delete a task
-    .delete('/delete-task', authMiddleware, todoController.deleteTask)
+    .post('/delete-task', authMiddleware, todoController.deleteTask)
     // get edit task page
-    .get("/edit-task/:id", authMiddleware, todoController.getTaskId)
+    .get("/edit-task/:id", authMiddleware, todoController.getEditTask)
     // post edit task
-    .put('/edit-task/:id', authMiddleware, todoController.putEditTask);
+    .post('/edit-task/:id', authMiddleware, todoController.postEditTask);
     
     
 module.exports = router;

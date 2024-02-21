@@ -2,83 +2,91 @@ const User = require('../models/user');
 const Task = require('../models/todo');
 
 const adminController = {
-    async getUsers(req, res) {
+    // Get All Users
+    getUsers: async (req, res) => {
         try {
             const users = await User.find();
             res.render('admin', { users });
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
     },
 
-    async getEditUser(req, res) {
+    //Edit user by Id and render edit page
+    getEditUserByID: async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
             res.render('adminUpdate', { user });
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
     },
 
-    async postEditUser(req, res) {
+    // Edit user
+    putEditUser: async (req, res) => {
         try {
             await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
         res.redirect('/admin/tasks');
     },
 
-    async postDeleteUser(req, res) {
+    // Delete User
+    deleteUser: async (req, res) => {
         try {
             await User.findByIdAndDelete(req.body.user_id);
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
         res.redirect('/admin/tasks');
     },
 
-    async getAlltasks(req, res) {
+// Get All task of a specific user
+    getAllTasks: async (req, res) => {
         try {
             const tasks = await Task.find({ userId: req.params.id });
             res.render('userTasks', { tasks, userId: req.params.id });
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
     },
 
-    async postDeleteTask(req, res) {
+    // delete Task
+    deleteTask: async (req, res) => {
         try {
             await Task.findByIdAndDelete(req.body.taskId);
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
         res.redirect(`/admin/allTasks/:${req.body.userId}`);
     },
 
-    async getEditTask(req, res) {
+    // Get task id and open edit task of that task id
+    getEditTaskById: async (req, res) => {
         try {
             const task = await Task.findById(req.params.id);
             res.render('updateUserTasks', { task });
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
     },
 
-    async postEditTask(req, res) {
+    // Edit task
+    putEditTask: async (req, res) => {
         try {
             await Task.findByIdAndUpdate(req.params.id, { task: req.body.updatedTask });
         } catch (error) {
-            handleError(res, error);
+            adminController.handleError(res, error);
         }
         res.redirect(req.get('referer'));
+    },
+
+    // Error Handdle
+    handleError: (res, error) => {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 };
 
 module.exports = adminController;
-
-function handleError(res, error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-}
-
