@@ -3,7 +3,7 @@ const { json } = require('body-parser');
 const router = express.Router();
 
 const Task = require('../models/todo');
-const {authMiddleware} = require('../middlewares/authMiddleware')
+const {authMiddleware} = require('../middleware/authMiddleware')
 const todoController = require('../controllers/todoController')
 
 router
