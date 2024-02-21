@@ -8,14 +8,14 @@ const authController = require('../controllers/authController');
 router
     // Register
     .get('/register', authController.getRegister)
-    .post('/register', authController.register)
+    .post('/register', authController.postRegister)
 
     // Login
     .get('/login', authController.getLogin)
-    .post('/login', authController.login)
+    .post('/login', authController.postLogin)
 
     //Logout
-    .post('/logout', authController.logout);
+    .post('/logout', authController.postLogout);
     
 
 module.exports = router;
