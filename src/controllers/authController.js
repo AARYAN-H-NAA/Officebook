@@ -9,12 +9,12 @@ const jwtKey = "MY_SECRET_KEY";
 const authController = {
 
   //Get Register Page
-  async getRegister (req, res, next) {
+  getRegister:async=>  (req, res, next) {
     res.render('authRegister');
   },
 
   //Post Register data
-  async register (req, res){
+  register:async => (req, res){
     const { username, email, mobile, password } = req.body;
     try {
       const existingUser = await User.findOne({ email });
@@ -36,11 +36,12 @@ const authController = {
     }
   },
 
-  async getLogin(req, res, next) {
+  // Get Login Page
+  getLogin:async (req, res, next) =>{
     res.render('authLogin');
 },
-
-  async login (req, res){
+// Post login Page
+  login :async =>(req, res){
     const { email, password } = req.body;
     console.table([email, password])
     try {
@@ -72,8 +73,8 @@ const authController = {
       res.status(500).json({ message: "Something went wrong" });
     }
   },
-
-  async logout (req, res) {
+// Post Logout
+  logout:async (req, res)=> {
     res.clearCookie('token', function (err) {
       if (err) {
         console.error('Error clearing cookie:', err);
