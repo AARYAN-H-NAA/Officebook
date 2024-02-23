@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const Task = require('../models/todo')
 
 const todoController = {
-  async getTodo (req, res, next){
+  // Get all Todo of logged in user
+  getTodo: async (req, res, next)=>{
     const userId = req.userId;
     try {
       const tasks = await Task.find({ userId }).exec();
@@ -14,8 +15,8 @@ const todoController = {
       res.status(500).send('Internal Server Error');
     }
   },
-
-  async postTodo (req, res) {
+// Post a new todo for the logged in user
+  postTodo: async (req, res)=> {
     const userId = req.userId;
     try {
       const newTask = new Task({ task: req.body.tasks, userId: userId });
@@ -26,8 +27,8 @@ const todoController = {
       res.status(500).send('Internal Server Error');
     }
   },
-
-  async deleteTask (req, res){
+// Delete a specific clicked task of loged in user
+  deleteTask:async (req, res)=>{
     try {
       const taskId = req.body.taskId;
 
@@ -40,8 +41,8 @@ const todoController = {
     res.redirect('/tasks/todo');
   },
 
-  
-  async getEditTask(req, res){
+  //populate date in edit page of a specific clicked task of logged in user
+  getEditTaskId: async (req, res)=>{
     try {
       const taskId = req.params.id;
       const task = await Task.findById(taskId).exec();
@@ -52,8 +53,8 @@ const todoController = {
       res.status(500).send('Internal Server Error');
     }
   },
-
-  async postEditTask (req, res){
+// take values that user esites in edit page and repalace it with original values
+  putEditTask: async(req, res)=>{
     try {
       const taskId = req.params.id;
       const updatedTask = req.body.updatedTask;
