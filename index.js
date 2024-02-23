@@ -1,6 +1,7 @@
 // index.js
 const path = require('path')
 const express = require('express');
+const dotenv = require('dotenv').config();
 const dbController = require('./src/database/dbController');
 const routes = require('../routes/mainRoutes')
 const app = express();
