@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 
 
 
-const jwtKey = "MY_SECRET_KEY";
+const jwtKey = process.env.jwtSecret;
+const expiryTime = process.env.expiryTime
 
 const authController = {
 
@@ -55,7 +56,7 @@ const authController = {
         return res.status(400).json({ message: "Incorrect Password" });
       }
       // Generate JWT token
-      const token = jwt.sign({ email: existingUser.email, id: existingUser._id, role: existingUser.role }, jwtKey, { expiresIn: '1h' });
+      const token = jwt.sign({ email: existingUser.email, id: existingUser._id, role: existingUser.role }, jwtKey, { expiresIn: expiryTime});
       // Redirect to the dashboard or any other desired route
       if (existingUser.role == "user") {
         // Set the token in a cookie
