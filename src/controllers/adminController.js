@@ -36,6 +36,7 @@ const adminController = {
     deleteUser: async (req, res) => {
         try {
             await User.findByIdAndDelete(req.body.user_id);
+            await Task.deleteMany({userId:req.body.user_id})
         } catch (error) {
             adminController.handleError(res, error);
         }
