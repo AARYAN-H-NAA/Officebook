@@ -3,7 +3,7 @@ const { json } = require('body-parser');
 const router = express.Router();
 
 const Task = require('../models/todo');
-const {authMiddleware} = require('../middlewares/authMiddleware')
+const {authMiddleware} = require('../middleware/authMiddleware')
 const todoController = require('../controllers/todoController')
 
 router
@@ -12,11 +12,11 @@ router
     // Add new task
     .post('/todo', authMiddleware, todoController.postTodo)
     // delete a task
-    .post('/delete-task', authMiddleware, todoController.deleteTask)
+    .delete('/delete-task', authMiddleware, todoController.deleteTask)
     // get edit task page
-    .get("/edit-task/:id", authMiddleware, todoController.getEditTask)
+    .get("/edit-task/:id", authMiddleware, todoController.getEditTaskId)
     // post edit task
-    .post('/edit-task/:id', authMiddleware, todoController.postEditTask);
+    .put('/edit-task/:id', authMiddleware, todoController.putEditTask);
     
     
 module.exports = router;

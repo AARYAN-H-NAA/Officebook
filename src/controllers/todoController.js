@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Task = require('../models/todo')
 
 const todoController = {
-  async getTodo (req, res, next){
+  getTodo: async (req, res, next)=>{
     const userId = req.userId;
     try {
       const tasks = await Task.find({ userId }).exec();
@@ -15,7 +15,7 @@ const todoController = {
     }
   },
 
-  async postTodo (req, res) {
+  postTodo: async (req, res)=> {
     const userId = req.userId;
     try {
       const newTask = new Task({ task: req.body.tasks, userId: userId });
@@ -27,7 +27,7 @@ const todoController = {
     }
   },
 
-  async deleteTask (req, res){
+  deleteTask:async (req, res)=>{
     try {
       const taskId = req.body.taskId;
 
@@ -41,7 +41,7 @@ const todoController = {
   },
 
   
-  async getEditTask(req, res){
+  getEditTaskId: async (req, res)=>{
     try {
       const taskId = req.params.id;
       const task = await Task.findById(taskId).exec();
@@ -53,7 +53,7 @@ const todoController = {
     }
   },
 
-  async postEditTask (req, res){
+  putEditTask: async(req, res)=>{
     try {
       const taskId = req.params.id;
       const updatedTask = req.body.updatedTask;
